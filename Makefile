@@ -6,15 +6,15 @@
 #*   By: kcosta <kcosta@student.42.fr>              +#+  +:+       +#+        *#
 #*                                                +#+#+#+#+#+   +#+           *#
 #*   Created: 2016/11/15 23:06:36 by kcosta            #+#    #+#             *#
-#*   Updated: 2016/11/17 14:07:39 by kcosta           ###   ########.fr       *#
+#*   Updated: 2016/12/23 20:24:20 by kcosta           ###   ########.fr       *#
 #*                                                                            *#
 #* ************************************************************************** *#
 
 NAME = halma
 CC = gcc
-FLAGS = -Wextra -Wall -Werror
+FLAGS = -Wextra -Wall -Werror -g
 SRCSPATH = srcs/
-SRCS = halma.c display.c menu.c player.c game.c
+SRCS = halma.c display.c menu.c player.c game.c check.c
 OBJS = $(SRCS:.c=.o)
 
 %.o: $(SRCSPATH)%.c

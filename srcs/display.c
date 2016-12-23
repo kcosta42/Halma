@@ -6,7 +6,7 @@
 /*   By: kcosta <kcosta@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 23:19:04 by kcosta            #+#    #+#             */
-/*   Updated: 2016/11/17 14:26:06 by kcosta           ###   ########.fr       */
+/*   Updated: 2016/12/20 20:39:34 by kcosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ void		display_grid(int nb_player, t_player **player)
 	t_vector	pos;
 	char		hex[16] = "0123456789abcdef";
 	char		current;
+	int			pair;
 
+	pair = 1;
 	pos.y = 0;
 	printf("  X  0 1 2 3 4 5 6 7 8 9 a b c d e f\n");
 	printf("Y                                   \n");
@@ -42,9 +44,33 @@ void		display_grid(int nb_player, t_player **player)
 						current = 'A' + i;
 				}
 			}
-			printf(" %c", current);
+			if (current != '.')
+			{
+				if (pos.x == previous_jump.x && pos.y == previous_jump.y)
+					printf("%s %c%s", BLUE, current, EOC);
+				else
+					printf(" %c", current);
+			}
+			else
+			{
+				if (!pair)
+				{
+					if ((pos.x % 2))
+						printf(" %s.%s", RED, EOC);
+					else
+						printf(" .");
+				}
+				else
+				{
+					if ((pos.x % 2))
+						printf(" .");
+					else
+						printf(" %s.%s", RED, EOC);
+				}
+			}
 			pos.x++;
 		}
+		pair = !pair;
 		printf("\n");
 		pos.y++;
 	}

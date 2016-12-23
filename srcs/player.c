@@ -6,7 +6,7 @@
 /*   By: kcosta <kcosta@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/16 00:41:21 by kcosta            #+#    #+#             */
-/*   Updated: 2016/11/17 13:20:52 by kcosta           ###   ########.fr       */
+/*   Updated: 2016/12/23 18:27:52 by kcosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,16 @@ void		initialise_p1(int nb_player, t_player **player)
 	t_vector	max;
 	int			i;
 
+	player[0]->ia = -1;
+	printf("Enable Player One auto ?\nYes - 1\nNo - 0\n");
+	while (player[0]->ia != 0 && player[0]->ia != 1)
+	{
+		if (player[0]->ia != -1)
+			printf("%sInvalid Entry\n%s", RED, EOC);
+		player[0]->ia = getchar();
+		player[0]->ia -= '0';
+		FLUSH();
+	}
 	i = 0;
 	pos.y = 0;
 	max.x = (nb_player == 2) ? 5 : 4;
@@ -70,6 +80,16 @@ void		initialise_p2(int nb_player, t_player **player)
 	t_vector	max;
 	int			i;
 
+	player[1]->ia = -1;
+	printf("Enable Player Two auto ?\nYes - 1\nNo - 0\n");
+	while (player[1]->ia != 0 && player[1]->ia != 1)
+	{
+		if (player[1]->ia != -1)
+			printf("%sInvalid Entry\n%s", RED, EOC);
+		player[1]->ia = getchar();
+		player[1]->ia -= '0';
+		FLUSH();
+	}
 	i = 0;
 	pos.y = 15;
 	max.x = (nb_player == 2) ? 5 : 4;
@@ -95,6 +115,16 @@ void		initialise_p3(int nb_player, t_player **player)
 	t_vector	max;
 	int			i;
 
+	player[2]->ia = -1;
+	printf("Enable Player Three auto ?\nYes - 1\nNo - 0\n");
+	while (player[2]->ia != 0 && player[2]->ia != 1)
+	{
+		if (player[2]->ia != -1)
+			printf("%sInvalid Entry\n%s", RED, EOC);
+		player[2]->ia = getchar();
+		player[2]->ia -= '0';
+		FLUSH();
+	}
 	(void)nb_player;
 	i = 0;
 	pos.y = 0;
@@ -121,6 +151,16 @@ void		initialise_p4(int nb_player, t_player **player)
 	t_vector	max;
 	int			i;
 
+	player[3]->ia = -1;
+	printf("Enable Player Four auto ?\nYes - 1\nNo - 0\n");
+	while (player[3]->ia != 0 && player[3]->ia != 1)
+	{
+		if (player[3]->ia != -1)
+			printf("%sInvalid Entry\n%s", RED, EOC);
+		player[3]->ia = getchar();
+		player[3]->ia -= '0';
+		FLUSH();
+	}
 	(void)nb_player;
 	i = 0;
 	pos.y = 15;
