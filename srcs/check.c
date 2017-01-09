@@ -6,7 +6,7 @@
 /*   By: kcosta <kcosta@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/21 15:29:38 by kcosta            #+#    #+#             */
-/*   Updated: 2016/11/21 16:05:58 by kcosta           ###   ########.fr       */
+/*   Updated: 2016/12/29 15:48:24 by kcosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ int		check_p4(int nb_player, t_player *player);
 int		(*check[4])(int, t_player*) = {&check_p1, &check_p2,
 										&check_p3, &check_p4};
 
-int		check_win(int nb_player)
+int		check_win(int nb_player, t_player **player)
 {
 	for (int i = 0; i < nb_player; i++)
 	{
-		if (check[i])
+		if (check[i](nb_player, player[i]))
 			return (i);
 	}
 	return (-1);

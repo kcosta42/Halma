@@ -6,7 +6,7 @@
 /*   By: kcosta <kcosta@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 22:52:48 by kcosta            #+#    #+#             */
-/*   Updated: 2016/12/20 20:39:45 by kcosta           ###   ########.fr       */
+/*   Updated: 2016/12/30 20:55:36 by kcosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int		main(void)
 	t_player	**player;
 	int			winner;
 
+	srand(time(NULL));
 	winner = -1;
 	cursor_pos.x = 0;
 	cursor_pos.y = 20;
@@ -31,7 +32,12 @@ int		main(void)
 		for (int i = 0; i < nb_player; i++)
 		{
 			winner = play(nb_player, i, player);
-			printf("%d\n", winner);
+			if (winner != -1)
+			{
+				system("clear");
+				printf("Joueur %c won!\n", 'A' + winner);
+				exit(0);
+			}
 		}
 	}
 }

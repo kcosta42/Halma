@@ -6,7 +6,7 @@
 /*   By: kcosta <kcosta@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 13:21:13 by kcosta            #+#    #+#             */
-/*   Updated: 2016/12/23 21:31:21 by kcosta           ###   ########.fr       */
+/*   Updated: 2016/12/30 22:00:55 by kcosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 int			replay;
 int			first_move;
 int			rejump = 0;
+int			limit;
 
 unsigned int rand_interval(unsigned int min, unsigned int max)
 {
@@ -46,6 +47,47 @@ int			correct_pion(int nb_player, t_player *player, t_vector pos)
 			return (i);
 	}
 	return (-1);
+}
+
+int			near_coor_ia(int current_player, t_vector pion_coor, t_vector next_coor)
+{
+	return ((next_coor.x == pion_coor.x + 1 && next_coor.y == pion_coor.y && (current_player == 0 || current_player == 3)) ||
+			(next_coor.x == pion_coor.x + 1 && next_coor.y == pion_coor.y + 1 && (current_player == 0 || current_player == 2 || current_player == 3)) ||
+			(next_coor.x == pion_coor.x && next_coor.y == pion_coor.y + 1 && (current_player == 0 || current_player == 2)) ||
+			(next_coor.x == pion_coor.x - 1 && next_coor.y == pion_coor.y + 1 && (current_player == 0 || current_player == 1 || current_player == 2)) ||
+			(next_coor.x == pion_coor.x - 1 && next_coor.y == pion_coor.y && (current_player == 1 || current_player == 2)) ||
+			(next_coor.x == pion_coor.x - 1 && next_coor.y == pion_coor.y - 1 && (current_player == 1 || current_player == 2 || current_player == 3)) ||
+			(next_coor.x == pion_coor.x && next_coor.y == pion_coor.y - 1 && (current_player == 1 || current_player == 3)) ||
+			(next_coor.x == pion_coor.x + 1 && next_coor.y == pion_coor.y - 1 && (current_player == 0 || current_player == 1 || current_player == 3)));
+}
+
+int			jump_coor_ia(int current_player, int nb_player, t_player **player, t_vector pion_coor, t_vector next_coor)
+{
+	int			jump;
+	t_vector	index;
+
+	index.x = 0;
+	jump = 0;
+	while (index.x < nb_player)
+	{
+		index.y = (nb_player == 2) ? 18 : 12;
+		while (index.y >= 0)
+		{
+			if ((next_coor.x == pion_coor.x + 2 && next_coor.y == pion_coor.y && next_coor.x == player[index.x]->pion[index.y].x + 1 && next_coor.y == player[index.x]->pion[index.y].y && (current_player == 0 || current_player == 3)) ||
+					(next_coor.x == pion_coor.x + 2 && next_coor.y == pion_coor.y + 2 && next_coor.x == player[index.x]->pion[index.y].x + 1 && next_coor.y == player[index.x]->pion[index.y].y + 1 && (current_player == 0 || current_player == 2 || current_player == 3)) ||
+					(next_coor.x == pion_coor.x && next_coor.y == pion_coor.y + 2 && next_coor.x == player[index.x]->pion[index.y].x && next_coor.y == player[index.x]->pion[index.y].y + 1 && (current_player == 0 || current_player == 2)) ||
+					(next_coor.x == pion_coor.x - 2 && next_coor.y == pion_coor.y + 2 && next_coor.x == player[index.x]->pion[index.y].x - 1 && next_coor.y == player[index.x]->pion[index.y].y + 1 && (current_player == 0 || current_player == 1 || current_player == 2)) ||
+					(next_coor.x == pion_coor.x - 2 && next_coor.y == pion_coor.y && next_coor.x == player[index.x]->pion[index.y].x - 1 && next_coor.y == player[index.x]->pion[index.y].y && (current_player == 1 || current_player == 2)) ||
+					(next_coor.x == pion_coor.x - 2 && next_coor.y == pion_coor.y - 2 && next_coor.x == player[index.x]->pion[index.y].x - 1 && next_coor.y == player[index.x]->pion[index.y].y - 1 && (current_player == 1 || current_player == 2 || current_player == 3)) ||
+					(next_coor.x == pion_coor.x && next_coor.y == pion_coor.y - 2 && next_coor.x == player[index.x]->pion[index.y].x && next_coor.y == player[index.x]->pion[index.y].y - 1 && (current_player == 1 || current_player == 3)) ||
+					(next_coor.x == pion_coor.x + 2 && next_coor.y == pion_coor.y - 2 && next_coor.x == player[index.x]->pion[index.y].x + 1 && next_coor.y == player[index.x]->pion[index.y].y - 1 && (current_player == 0 || current_player == 1 || current_player == 3)))
+				jump = 1;
+			index.y--;
+		}
+		index.x++;
+	}
+	rejump = jump;
+	return (jump);
 }
 
 int			near_coor(t_vector pion_coor, t_vector next_coor)
@@ -89,16 +131,27 @@ int			jump_coor(int nb_player, t_player **player, t_vector pion_coor, t_vector n
 	return (jump);
 }
 
-t_vector	move_pion(int nb_player, t_player **player, t_vector pion_coor, t_vector next_coor)
+t_vector	move_pion(int current_player, int nb_player, t_player **player, t_vector pion_coor, t_vector next_coor)
 {
 	t_vector	index;
 
 	index.x = 0;
-	if (rejump && !(pion_coor.x == previous_jump.x && pion_coor.y == previous_jump.y))
-		return (pion_coor);
-	if (rejump || !near_coor(pion_coor, next_coor))
-		if (!jump_coor(nb_player, player, pion_coor, next_coor))
+	if (player[current_player]->ia)
+	{
+		if (rejump && !(pion_coor.x == previous_jump.x && pion_coor.y == previous_jump.y))
 			return (pion_coor);
+		if (rejump || !near_coor_ia(current_player, pion_coor, next_coor))
+			if (!jump_coor_ia(current_player, nb_player, player, pion_coor, next_coor))
+				return (pion_coor);
+	}
+	else
+	{
+		if (rejump && !(pion_coor.x == previous_jump.x && pion_coor.y == previous_jump.y))
+			return (pion_coor);
+		if (rejump || !near_coor(pion_coor, next_coor))
+			if (!jump_coor(nb_player, player, pion_coor, next_coor))
+				return (pion_coor);
+	}
 	while (index.x < nb_player)
 	{
 		index.y = (nb_player == 2) ? 18 : 12;
@@ -195,8 +248,12 @@ int		play(int nb_player, int current_player, t_player **player)
 	int			current;
 
 	first_move = 0;
+	limit = 0;
 	while (player_replay(nb_player, current_player, player))
 	{
+		limit++;
+		if (limit > 5000)
+			return (-1);
 		current = -1;
 		pion_coor.x = -1;
 		pion_coor.y = -1;
@@ -211,20 +268,25 @@ int		play(int nb_player, int current_player, t_player **player)
 		}
 		printf("Choose where to move:\n");
 		next_coor = get_move(player[current_player]->ia);
-		tmp = move_pion(nb_player, player, pion_coor, next_coor);
+		tmp = move_pion(current_player, nb_player, player, pion_coor, next_coor);
 		if (tmp.x == player[current_player]->pion[current].x &&
 				tmp.y == player[current_player]->pion[current].y)
+		{
 			replay = -1;
+			rejump = 0;
+		}
 		else
 		{
+//			blink_pion(nb_player, player, player[current_player]->pion[current],
+//						(player[current_player]->ia) ? 8 : 0);
 			player[current_player]->pion[current] = tmp;
 			previous_jump = tmp;
-			if (check_win(nb_player))
-				return (1);
-			else if (!rejump)
-				return (-1);
+//			blink_pion(nb_player, player, player[current_player]->pion[current],
+//						(player[current_player]->ia) ? 4 : 0);
+			if (!rejump)
+				return (check_win(nb_player, player));
 		}
 	}
 	rejump = 0;
-	return (check_win(nb_player));
+	return (check_win(nb_player, player));
 }
